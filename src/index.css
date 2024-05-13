@@ -18,13 +18,14 @@ body {
   flex-direction: column;
   gap: 12px;
   border-radius: 8px;
-  background-color: white
+  background-color: transparent
 }
 .input {
   padding: 16px 10px;
   border: none;
   border-radius: 16px;
-  
+  background-color: #313131;
+  color: #9C9C9C;
 
 }
 .select {

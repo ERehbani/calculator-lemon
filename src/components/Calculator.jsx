@@ -1,47 +1,62 @@
 import { useState, useEffect } from "react";
-import "./calculator.css";
-// const SatoshiSvg = require("../../")
+import "./selectStyles.js";
 import Select from "react-select";
+import options from "../options/options-data";
+import colourStyles from "./selectStyles.js";
 
 const Converter = () => {
   const [amount, setAmount] = useState();
-
   const [result, setResult] = useState();
-  const [calculated, setCalculated] = useState();
   const [first, setFirst] = useState("BTC");
   const [second, setSecond] = useState("USDT");
-
   const [rates, setRates] = useState(null);
+
   useEffect(() => {
     fetch("https://api.lemoncash.io/api/v1/exchange-rates-quotations-external")
       .then((response) => response.json())
       .then((data) => {
         setRates(data.results);
       });
-  }, []);
-
-  // const { sale_price: { amount } } = filterConvert;
+    if (amount < 0) return setAmount(0);
+  }, [amount]);
 
   useEffect(() => {
     if (rates) {
       const filterConvert = rates.filter((item) => {
         return item.instrument === `${first}-${second}`;
       });
-      console.log(filterConvert, `${first}-${second}`);
       setResult(filterConvert);
     }
   }, [rates, first, second]);
 
   const handleTypeChangeFirst = (selectedOption) => {
-    setFirst(selectedOption.value);
-  };
-  
-  const handleAmountChange = (e) => {
-    setAmount(e.target.value);
+    if (selectedOption.value === second) {
+      // Intercambiar las opciones
+      setSecond(first);
+      setFirst(selectedOption.value);
+    } else {
+      setFirst(selectedOption.value);
+    }
+    if (selectedOption.value !== second) {
+      setFirst(selectedOption.value);
+    }
   };
 
-  const handleTypeChangeSecond = (event) => {
-    setSecond(event.target.value);
+  const handleTypeChangeSecond = (selectedOption) => {
+    if (selectedOption.value === first) {
+      // Intercambiar las opciones
+      setFirst(second);
+      setSecond(selectedOption.value);
+    } else {
+      setSecond(selectedOption.value);
+    }
+    if (selectedOption.value !== first) {
+      setSecond(selectedOption.value);
+    }
+  };
+
+  const handleAmountChange = (e) => {
+    setAmount(e.target.value);
   };
 
   function calculateConversion(amount, firstCurrency, secondCurrency, rates) {
@@ -51,10 +66,9 @@ const Converter = () => {
       });
       const salePrice = filterConvert[0].sale_price.amount;
       const calculatedAmount = (amount / (salePrice / 100000000)).toFixed(2);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
+      ).innerHTML = `<span class="bold">$${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
     }
 
     if (first === "USDT" && second === "BTC") {
@@ -63,10 +77,9 @@ const Converter = () => {
       });
       const salePrice = filterConvert[0].sale_price.amount;
       const calculatedAmount = (amount / salePrice).toFixed(7);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
+      ).innerHTML = `<span class="bold">$${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
     }
 
     if (first === "SAT" && second === "USDT") {
@@ -75,10 +88,9 @@ const Converter = () => {
       });
       const salePrice = filterConvert[0].sale_price.amount;
       const calculatedAmount = (amount * (salePrice / 100000000)).toFixed(7);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
+      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">$${calculatedAmount} ${second}</span>`;
     }
 
     if (first === "ARS" && second === "USDT") {
@@ -87,14 +99,12 @@ const Converter = () => {
       });
       const salePrice = filterConvert[0].sale_price.amount;
       const calculatedAmount = (amount / salePrice).toFixed(8);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
+      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">$${calculatedAmount} ${second}</span>`;
     }
     if (first === "SAT" && second === "BTC") {
       const calculatedAmount = (amount / 100000000).toFixed(8);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
       ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
@@ -105,10 +115,9 @@ const Converter = () => {
       });
       const salePrice = filterConvert[0].sale_price.amount;
       const calculatedAmount = (amount / salePrice).toFixed(8);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
+      ).innerHTML = `<span class="bold">$${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
     }
 
     if (first === "SAT" && second === "ARS") {
@@ -117,10 +126,9 @@ const Converter = () => {
       });
       const salePrice = filterConvert[0].sale_price.amount;
       const calculatedAmount = (amount * (salePrice / 100000000)).toFixed(2);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
+      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">$${calculatedAmount} ${second}</span>`;
     }
 
     if (first === "ARS" && second === "SAT") {
@@ -129,24 +137,21 @@ const Converter = () => {
       });
       const salePrice = filterConvert[0].sale_price.amount;
       const calculatedAmount = ((amount / salePrice) * 100000000).toFixed(2);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
+      ).innerHTML = `<span class="bold">$${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
     }
 
     if (first === "BTC" && second === "SAT") {
       const calculatedAmount = (amount * 100000000).toFixed(0);
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
-      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>}`;
+      ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
     }
     if (result.length > 0) {
       const calculatedAmount = (amount * result[0].sale_price.amount).toFixed(
         2
       );
-      setCalculated(calculatedAmount);
       document.getElementById(
         "calculated"
       ).innerHTML = `<span class="bold">${amount} ${first}</span> <span class="are"> son </span><br/> <span class="result">${calculatedAmount} ${second}</span>`;
@@ -158,27 +163,9 @@ const Converter = () => {
     return calculatedAmount;
   };
 
-  const options = [
-    { value: "BTC", label: "BTC", image: { src: "../../public/btc_calc.svg" } },
-    {
-      value: "SAT",
-      label: "SAT",
-      image: { src: "../../public/satoshi_calc.svg" },
-    },
-    { value: "ARS", label: "ARS", image: { src: "../../public/ars_calc.svg" } },
-    {
-      value: "USDT",
-      label: "USDT",
-      image: { src: "../../public/usdt_calc.svg" }
-    },
-  ];
-  const secondOptions = options.map(option => ({
-    ...option,
-    isDisabled: option.value === second,
-  }));
-
-  const formatOptionLabel = ({ value, label, image }) => (
-    <div style={{ display: "flex", alignItems: "center" }}>
+  const formatOptionLabel = ({ label, image }) => (
+    <div
+      style={{ display: "flex", alignItems: "center", borderRadius: "100px" }}>
       <img
         src={image.src}
         width="30px"
@@ -188,6 +175,7 @@ const Converter = () => {
       {label}
     </div>
   );
+
   return (
     <div className="container">
       <h1 className="title">Calculadora de Satoshis</h1>
@@ -199,40 +187,22 @@ const Converter = () => {
         value={amount}
         onChange={handleAmountChange}
       />
-      {/* <select
-        id="conversionTypeFirst"
-        className="select"
-        value={first}
-        onChange={handleTypeChangeFirst}>
-        <option value="BTC" defaultValue disabled={first !== second}>
-          BTC
-        </option>
-        <option value="SAT">
-          SAT
-        </option>
-        <option value="ARS">ARS</option>
-        <option value="USDT">USDT</option>
-      </select> */}
       <Select
-        value={options.find(option => option.value === first)}
+        value={options.find((option) => option.value === first)}
         onChange={handleTypeChangeFirst}
         isSearchable={false}
         formatOptionLabel={formatOptionLabel}
-        options={secondOptions}
-
+        options={options}
+        styles={colourStyles}
       />
-      <select
-        id="conversionTypeSecond"
-        className="select"
-        value={second}
-        onChange={handleTypeChangeSecond}>
-        <option value="BTC">BTC</option>
-        <option value="SAT">SAT</option>
-        <option value="ARS">ARS</option>
-        <option value="USDT" defaultValue>
-          USDT
-        </option>
-      </select>
+      <Select
+        value={options.find((option) => option.value === second)}
+        onChange={handleTypeChangeSecond}
+        isSearchable={false}
+        formatOptionLabel={formatOptionLabel}
+        options={options}
+        styles={colourStyles}
+      />
       <button className="button" onClick={() => handleSubmit()}>
         Convertir
       </button>
