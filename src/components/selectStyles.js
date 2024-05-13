@@ -20,9 +20,10 @@ const dot = (color = "transparent") => ({
 const colourStyles = {
   control: (styles) => ({
     ...styles,
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderRadius: "100px",
     borderStyle: "none",
+
   }),
   option: (styles, { isDisabled, isFocused, isSelected }) => {
     return {
@@ -53,13 +54,14 @@ const colourStyles = {
   menu: (provided) => ({
     ...provided,
     background: "black",
+    borderRadius: '8px'
   }),
   input: (styles) => ({ ...styles, ...dot("") }),
   placeholder: (styles) => ({ ...styles, ...dot("#ccc") }),
   singleValue: (styles, { data }) => ({
     ...styles,
     ...dot(data.color),
-    color: "black",
+    color: "white"
   }),
 };
 
