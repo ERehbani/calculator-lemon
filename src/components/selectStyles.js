@@ -33,7 +33,7 @@ const colourStyles = {
         : isSelected
         ? "#00F068"
         : isFocused
-        ? "white"
+        ? "#004A20"
         : undefined,
       color: isDisabled
         ? "gray"
@@ -45,10 +45,10 @@ const colourStyles = {
         : // eslint-disable-next-line no-constant-condition
         "white"
         ? isFocused
-          ? "black"
+          ? "white"
           : "white"
         : "white",
-      cursor: isDisabled ? "not-allowed" : "default",
+      cursor: isDisabled ? "not-allowed" : "default"
     };
   },
   menu: (provided) => ({
