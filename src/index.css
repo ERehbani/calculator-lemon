@@ -20,9 +20,10 @@ body {
   border-radius: 8px;
   background-color: transparent;
   width: 100%;
-  max-width: 320px;
+  max-width: 470px;
   padding: 32px 24px;
-  height: 290px;
+  height: 345px;
+  border: 1px solid red;
 }
 .input {
   padding: 16px 40px;
