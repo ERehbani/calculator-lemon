@@ -10,6 +10,7 @@ const Converter = () => {
   const [first, setFirst] = useState("BTC");
   const [second, setSecond] = useState("USDT");
   const [rates, setRates] = useState(null);
+  const [conversionAttempted, setConversionAttempted] = useState(null)
 
   useEffect(() => {
     fetch("https://api.lemoncash.io/api/v1/exchange-rates-quotations-external")
@@ -158,9 +159,19 @@ const Converter = () => {
     }
   }
 
+  useEffect(() => {
+    if (amount) {
+      setConversionAttempted(false)
+    } else {
+
+    }
+  }, [amount])
+
   const handleSubmit = () => {
-    const calculatedAmount = calculateConversion(amount, first, second, rates);
-    return calculatedAmount;
+    setConversionAttempted(true);
+    if (amount) {
+      calculateConversion(amount, first, second, rates);
+    }
   };
 
   const formatOptionLabel = ({ label, image }) => (
@@ -205,7 +216,14 @@ const Converter = () => {
       <button className="button" onClick={() => handleSubmit()}>
         Convertir
       </button>
-      <div id="calculated" />
+
+      <div className="calculated">
+        {conversionAttempted && !amount ? (
+          <p>Primero debes ingresar un valor</p>
+        ) : (
+          <div id="calculated" />
+        )}
+      </div>
     </div>
   );
 };

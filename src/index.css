@@ -20,6 +20,9 @@ body {
   border-radius: 8px;
   background-color: transparent;
   width: 100%;
+  max-width: 320px;
+  padding: 32px 24px;
+  height: 290px;
 }
 .input {
   padding: 16px 40px;
@@ -76,3 +79,8 @@ input[type=number] {
 .are {
   color: white;
 }
+
+.calculated {
+  padding-top: 10px;
+}
+
